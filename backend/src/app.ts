@@ -4,13 +4,18 @@ import express from "express";
 import morgan from "morgan";
 import { ApiResponse } from "./common/utils/ApiResponse.js";
 
-import { errorHandler, routeNotFound } from "./middlewares/error.middleware.js";
+import {
+  errorHandler,
+  routeNotFound,
+} from "./common/middlewares/error.middleware.js";
+import authRoutes from "./modules/auth/auth.routes.js";
+import pollRoutes from "./modules/poll/poll.routes.js";
 
 const app = express();
 
 // Middlewares
 const corsOptions: CorsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.CORS_ORIGIN ?? true,
   credentials: true,
 };
 
@@ -29,7 +34,8 @@ app.get("/health", (_, res) => {
 });
 
 // Routes
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/polls", pollRoutes);
 
 // 404 Handler
 app.use(routeNotFound);

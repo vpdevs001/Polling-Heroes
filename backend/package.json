@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index",
+    "start": "node dist/server.js",
     "build": "tsc -p .",
-    "dev": "tsc-watch --onSuccess \"node dist/index\"",
+    "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
     "studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
@@ -36,6 +36,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@types/bcryptjs": "^3.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

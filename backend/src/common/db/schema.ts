@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   pgTable,
   uuid,
@@ -126,37 +127,77 @@ export const options = pgTable("options", {
 });
 
 // ======================
+// SUBMISSIONS
+// ======================
+
+export const submissions = pgTable(
+  "submissions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    pollId: uuid("poll_id")
+      .references(() => polls.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+
+    sessionToken: varchar("session_token", { length: 255 }),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    pollUserUnique: uniqueIndex("submissions_poll_user_uidx")
+      .on(table.pollId, table.userId)
+      .where(sql`${table.userId} is not null`),
+    pollSessionUnique: uniqueIndex("submissions_poll_session_uidx")
+      .on(table.pollId, table.sessionToken)
+      .where(sql`${table.sessionToken} is not null`),
+  }),
+);
+
+// ======================
 // RESPONSES
 // ======================
 
-export const responses = pgTable("responses", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const responses = pgTable(
+  "responses",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
 
-  pollId: uuid("poll_id")
-    .references(() => polls.id, {
-      onDelete: "cascade",
-    })
-    .notNull(),
+    pollId: uuid("poll_id")
+      .references(() => polls.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
 
-  questionId: uuid("question_id")
-    .references(() => questions.id, {
-      onDelete: "cascade",
-    })
-    .notNull(),
+    submissionId: uuid("submission_id")
+      .references(() => submissions.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
 
-  optionId: uuid("option_id")
-    .references(() => options.id, {
-      onDelete: "cascade",
-    })
-    .notNull(),
+    questionId: uuid("question_id")
+      .references(() => questions.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
 
-  userId: uuid("user_id").references(() => users.id, {
-    onDelete: "set null",
+    optionId: uuid("option_id")
+      .references(() => options.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    submissionQuestionUnique: uniqueIndex("responses_submission_question_uidx").on(
+      table.submissionId,
+      table.questionId,
+    ),
   }),
-
-  sessionToken: varchar("session_token", {
-    length: 255,
-  }),
-
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+);

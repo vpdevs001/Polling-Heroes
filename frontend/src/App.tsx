@@ -1,7 +1,57 @@
-function App() {
+import { Outlet } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { Navbar } from "./components/layout/Navbar.js";
+import { PageContainer } from "./components/layout/PageContainer.js";
+import { ProtectedRoute } from "./components/layout/ProtectedRoute.js";
+import { LoginPage } from "./pages/auth/LoginPage.js";
+import { RegisterPage } from "./pages/auth/RegisterPage.js";
+import { CreatePollPage } from "./pages/dashboard/CreatePollPage.js";
+import { DashboardPage } from "./pages/dashboard/DashboardPage.js";
+import { NotFoundPage } from "./pages/NotFoundPage.js";
+import { PollAnalyticsPage } from "./pages/poll/PollAnalyticsPage.js";
+import { PollRespondPage } from "./pages/poll/PollRespondPage.js";
+import { PollResultsPage } from "./pages/poll/PollResultsPage.js";
+
+function PublicShell() {
   return (
-    <div>App</div>
-  )
+    <>
+      <Navbar />
+      <PageContainer>
+        <Outlet />
+      </PageContainer>
+    </>
+  );
 }
 
-export default App
+export const router = createBrowserRouter([
+  { path: "/", element: <Navigate to="/dashboard" replace /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/register", element: <RegisterPage /> },
+  {
+    path: "/dashboard",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <PublicShell />,
+        children: [
+          { index: true, element: <DashboardPage /> },
+          { path: "create", element: <CreatePollPage /> },
+          { path: "polls/:pollId/analytics", element: <PollAnalyticsPage /> },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/poll",
+    element: <PublicShell />,
+    children: [
+      { path: ":slug", element: <PollRespondPage /> },
+      { path: ":slug/results", element: <PollResultsPage /> },
+    ],
+  },
+  { path: "*", element: <NotFoundPage /> },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
+}

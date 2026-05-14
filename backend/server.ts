@@ -1,11 +1,15 @@
 import "dotenv/config";
+import { createServer } from "http";
 import app from "./src/app.js";
+import { initSocket } from "./src/modules/socket/socket.js";
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT ?? "4000";
 
 const start = async () => {
-  app.listen(PORT, () => {
-    console.log(`Server is running at ${PORT} in ${process.env.NODE_ENV} mode`);
+  const httpServer = createServer(app);
+  initSocket(httpServer);
+  httpServer.listen(Number(PORT), () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
   });
 };
 

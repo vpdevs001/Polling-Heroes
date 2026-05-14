@@ -40,6 +40,10 @@ class ApiError extends Error {
     return new ApiError(404, message);
   }
 
+  static gone(message: string = "Gone") {
+    return new ApiError(410, message);
+  }
+
   static internal(message: string = "Internal Server Error") {
     return new ApiError(500, message);
   }
