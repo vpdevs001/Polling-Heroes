@@ -17,7 +17,9 @@ export function DashboardPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [resending, setResending] = useState(false);
-  const [resendStatus, setResendStatus] = useState<"idle" | "success" | "error">("idle");
+  const [resendStatus, setResendStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const load = async () => {
     setError(null);
@@ -60,7 +62,9 @@ export function DashboardPage() {
     setResending(true);
     setResendStatus("idle");
     try {
-      await axios.post("/api/v1/auth/resend-verification", { email: user.email });
+      await axios.post("/api/v1/auth/resend-verification", {
+        email: user.email,
+      });
       setResendStatus("success");
     } catch {
       setResendStatus("error");
@@ -86,13 +90,16 @@ export function DashboardPage() {
               <AlertCircle className="h-5 w-5 text-amber-500" />
             </div>
             <div className="flex-1">
-              <h3 className="font-medium text-amber-200">Email verification required</h3>
+              <h3 className="font-medium text-amber-200">
+                Email verification required
+              </h3>
               <p className="mt-1 text-sm text-amber-200/60">
-                Please verify your email address to unlock all features, including creating new polls.
+                Please verify your email address to unlock all features,
+                including creating new polls.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-9 border-amber-500/30 text-amber-200 hover:bg-amber-500/10"
                   onClick={handleResend}
                   disabled={resending || resendStatus === "success"}
@@ -104,10 +111,14 @@ export function DashboardPage() {
                   ) : (
                     <Mail className="mr-2 h-4 w-4" />
                   )}
-                  {resendStatus === "success" ? "Verification email sent!" : "Resend verification email"}
+                  {resendStatus === "success"
+                    ? "Verification email sent!"
+                    : "Resend verification email"}
                 </Button>
                 {resendStatus === "error" && (
-                  <span className="text-sm text-rose-400">Failed to send email. Try again later.</span>
+                  <span className="text-sm text-rose-400">
+                    Failed to send email. Try again later.
+                  </span>
                 )}
               </div>
             </div>
@@ -118,7 +129,9 @@ export function DashboardPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-semibold text-white">Your polls</h1>
-          <p className="text-zinc-400">Create, share, and analyze responses in real time.</p>
+          <p className="text-zinc-400">
+            Create, share, and analyze responses in real time.
+          </p>
         </div>
         <Link to="/dashboard/create">
           <Button type="button" className="gap-2">
@@ -131,7 +144,9 @@ export function DashboardPage() {
       {polls.length === 0 ? (
         <Card className="text-center">
           <p className="text-lg text-zinc-200">No polls yet</p>
-          <p className="mt-2 text-sm text-zinc-400">Create your first poll to get started.</p>
+          <p className="mt-2 text-sm text-zinc-400">
+            Create your first poll to get started.
+          </p>
           <Link className="mt-4 inline-block" to="/dashboard/create">
             <Button type="button">Create poll</Button>
           </Link>

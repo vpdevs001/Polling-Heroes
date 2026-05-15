@@ -22,7 +22,10 @@ export function PollRespondPage() {
   const [already, setAlready] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const sessionToken = useMemo(() => (slug ? getSessionToken(slug) : ""), [slug]);
+  const sessionToken = useMemo(
+    () => (slug ? getSessionToken(slug) : ""),
+    [slug],
+  );
 
   useEffect(() => {
     if (!slug) return;
@@ -52,7 +55,9 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Poll not found</h1>
-        <p className="mt-2 text-zinc-400">This link may be incorrect or the poll was removed.</p>
+        <p className="mt-2 text-zinc-400">
+          This link may be incorrect or the poll was removed.
+        </p>
       </Card>
     );
   }
@@ -90,8 +95,12 @@ export function PollRespondPage() {
   if (poll.status === "Ended" && !poll.isPublished) {
     return (
       <Card>
-        <h1 className="text-xl font-semibold text-white">This poll has ended</h1>
-        <p className="mt-2 text-zinc-400">Responses are closed and results are not published yet.</p>
+        <h1 className="text-xl font-semibold text-white">
+          This poll has ended
+        </h1>
+        <p className="mt-2 text-zinc-400">
+          Responses are closed and results are not published yet.
+        </p>
       </Card>
     );
   }
@@ -109,7 +118,9 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Already responded</h1>
-        <p className="mt-2 text-zinc-400">We already have a submission from you for this poll.</p>
+        <p className="mt-2 text-zinc-400">
+          We already have a submission from you for this poll.
+        </p>
       </Card>
     );
   }
@@ -125,10 +136,12 @@ export function PollRespondPage() {
     setFormError(null);
     setSubmitting(true);
     try {
-      const bodyAnswers = Object.entries(answers).map(([questionId, optionId]) => ({
-        questionId,
-        optionId,
-      }));
+      const bodyAnswers = Object.entries(answers).map(
+        ([questionId, optionId]) => ({
+          questionId,
+          optionId,
+        }),
+      );
       const body =
         poll.participantType === "Anonymous"
           ? { sessionToken, answers: bodyAnswers }
@@ -137,14 +150,18 @@ export function PollRespondPage() {
       if (!res.success) throw new Error(res.message);
       setSubmitted(true);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.data?.message?.includes("already")) {
+      if (
+        axios.isAxiosError(err) &&
+        err.response?.data?.message?.includes("already")
+      ) {
         setAlready(true);
       } else if (axios.isAxiosError(err) && err.response?.status === 410) {
         setFormError("This poll is no longer accepting responses.");
       } else {
         setFormError(
           axios.isAxiosError(err)
-            ? (err.response?.data as { message?: string } | undefined)?.message ?? "Submit failed"
+            ? ((err.response?.data as { message?: string } | undefined)
+                ?.message ?? "Submit failed")
             : "Submit failed",
         );
       }
@@ -157,7 +174,9 @@ export function PollRespondPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">{poll.title}</h1>
-        {poll.description ? <p className="mt-2 text-zinc-300">{poll.description}</p> : null}
+        {poll.description ? (
+          <p className="mt-2 text-zinc-300">{poll.description}</p>
+        ) : null}
       </div>
       <form onSubmit={(e) => void onSubmit(e)} className="space-y-6">
         {questions.map((q) => (
@@ -177,7 +196,9 @@ export function PollRespondPage() {
                     name={q.id}
                     value={o.id}
                     checked={answers[q.id] === o.id}
-                    onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
+                    onChange={() =>
+                      setAnswers((prev) => ({ ...prev, [q.id]: o.id }))
+                    }
                   />
                   <span className="text-zinc-200">{o.text}</span>
                 </label>
@@ -188,11 +209,16 @@ export function PollRespondPage() {
         <Button type="submit" disabled={submitting} className="w-full">
           {submitting ? "Submitting…" : "Submit responses"}
         </Button>
-        {formError ? <p className="text-center text-sm text-rose-300">{formError}</p> : null}
+        {formError ? (
+          <p className="text-center text-sm text-rose-300">{formError}</p>
+        ) : null}
       </form>
       {poll.isPublished ? (
         <p className="text-center text-sm text-zinc-400">
-          <Link className="text-white hover:underline underline-offset-4" to={`/poll/${slug}/results`}>
+          <Link
+            className="text-white hover:underline underline-offset-4"
+            to={`/poll/${slug}/results`}
+          >
             View published results
           </Link>
         </p>

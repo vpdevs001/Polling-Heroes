@@ -6,13 +6,19 @@ export function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/70 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/70 backdrop-blur animate-reveal [animation-duration:500ms]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="text-lg font-semibold tracking-tight text-white">
+        <Link
+          to="/"
+          className="text-lg font-semibold tracking-tight text-white"
+        >
           Polling<span className="text-zinc-400">Heroes</span>
         </Link>
         <nav className="flex items-center gap-6 text-sm font-medium">
-          <a href="#features" className="text-zinc-400 hover:text-white transition-colors">
+          <a
+            href="#features"
+            className="text-zinc-400 hover:text-white transition-colors"
+          >
             Features
           </a>
           {isAuthenticated ? (
@@ -28,7 +34,11 @@ export function Navbar() {
               <span className="hidden text-zinc-500 sm:inline">
                 {user?.firstName} {user?.lastName}
               </span>
-              <Button variant="ghost" type="button" onClick={() => void logout()}>
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={() => void logout()}
+              >
                 Log out
               </Button>
             </>

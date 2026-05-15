@@ -4,7 +4,12 @@ import type { PollListItem } from "../../types/index.js";
 import { Badge } from "../ui/Badge.js";
 import { Button } from "../ui/Button.js";
 import { Card } from "../ui/Card.js";
-import { copyToClipboard, formatDate, publicPollUrl, statusBadgeClass } from "../../lib/utils.js";
+import {
+  copyToClipboard,
+  formatDate,
+  publicPollUrl,
+  statusBadgeClass,
+} from "../../lib/utils.js";
 
 type Props = {
   poll: PollListItem;
@@ -30,7 +35,9 @@ export function PollCard({ poll, onEnd, onDelete, busy }: Props) {
         <div className="flex flex-wrap items-center gap-2">
           <Badge className={statusBadgeClass(poll.status)}>{poll.status}</Badge>
           {poll.isPublished ? (
-            <Badge className="bg-white/10 text-white ring-white/20">Published</Badge>
+            <Badge className="bg-white/10 text-white ring-white/20">
+              Published
+            </Badge>
           ) : null}
         </div>
       </div>
@@ -45,7 +52,9 @@ export function PollCard({ poll, onEnd, onDelete, busy }: Props) {
           type="button"
           variant="ghost"
           className="gap-2"
-          onClick={() => void copyToClipboard(publicPollUrl(poll.url)).then(() => {})}
+          onClick={() =>
+            void copyToClipboard(publicPollUrl(poll.url)).then(() => {})
+          }
         >
           <Copy className="h-4 w-4" />
           Copy link
@@ -56,7 +65,13 @@ export function PollCard({ poll, onEnd, onDelete, busy }: Props) {
           </Button>
         ) : null}
         {onDelete ? (
-          <Button type="button" variant="danger" disabled={busy} className="gap-2" onClick={onDelete}>
+          <Button
+            type="button"
+            variant="danger"
+            disabled={busy}
+            className="gap-2"
+            onClick={onDelete}
+          >
             <Trash2 className="h-4 w-4" />
             Delete
           </Button>
