@@ -11,6 +11,8 @@ import { Card } from "../../components/ui/Card.js";
 import { Input } from "../../components/ui/Input.js";
 import { Modal } from "../../components/ui/Modal.js";
 import { copyToClipboard, publicPollUrl } from "../../lib/utils.js";
+import { useAuth } from "../../hooks/useAuth.js";
+import { AlertCircle } from "lucide-react";
 
 type FormValues = z.infer<typeof createPollFormSchema>;
 
@@ -54,7 +56,7 @@ function QuestionEditor({
         ) : null}
       </div>
       <Input label="Question text" {...register(`questions.${index}.text`)} />
-      <label className="flex items-center gap-2 text-sm text-slate-300">
+      <label className="flex items-center gap-2 text-sm text-zinc-300">
         <Controller
           control={control}
           name={`questions.${index}.isRequired`}
@@ -69,7 +71,7 @@ function QuestionEditor({
         Required
       </label>
       <div className="space-y-2">
-        <p className="text-sm text-slate-400">Options</p>
+        <p className="text-sm text-zinc-400">Options</p>
         {fields.map((opt, oi) => (
           <div key={opt.id} className="flex flex-col gap-2 sm:flex-row sm:items-end">
             <div className="flex-1">
@@ -97,6 +99,7 @@ function QuestionEditor({
 }
 
 export function CreatePollPage() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
@@ -148,22 +151,32 @@ export function CreatePollPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Create a poll</h1>
-        <p className="text-slate-400">Add questions, options, and choose how participants join.</p>
+        <p className="text-zinc-400">Add questions, options, and choose how participants join.</p>
       </div>
+
+      {!user?.isVerified && (
+        <Card className="border-amber-500/20 bg-amber-500/5 p-4">
+          <div className="flex items-center gap-3 text-amber-200">
+            <AlertCircle className="h-5 w-5" />
+            <p className="text-sm">You must verify your email address before you can create polls.</p>
+          </div>
+        </Card>
+      )}
+
       <form className="space-y-6" onSubmit={onSubmit}>
         <Card className="space-y-4">
           <Input label="Title" {...form.register("title")} />
           <label className="block space-y-1.5 text-sm">
-            <span className="text-slate-300">Description</span>
+            <span className="text-zinc-300">Description</span>
             <textarea
-              className="min-h-[96px] w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-slate-100 outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/30"
+              className="min-h-[96px] w-full rounded-lg border border-white/10 bg-zinc-900/60 px-3 py-2 text-zinc-100 outline-none focus:border-white/40 focus:ring-2 focus:ring-white/10"
               {...form.register("description")}
             />
           </label>
           <label className="block space-y-1.5 text-sm">
-            <span className="text-slate-300">Participant type</span>
+            <span className="text-zinc-300">Participant type</span>
             <select
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-slate-100"
+              className="w-full rounded-lg border border-white/10 bg-zinc-900/60 px-3 py-2 text-zinc-100"
               {...form.register("participantType")}
             >
               <option value="Anonymous">Anonymous (session token)</option>
@@ -194,7 +207,7 @@ export function CreatePollPage() {
             <Plus className="h-4 w-4" />
             Add question
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={form.formState.isSubmitting || !user?.isVerified}>
             {form.formState.isSubmitting ? "Creating…" : "Create poll"}
           </Button>
         </div>
@@ -209,9 +222,9 @@ export function CreatePollPage() {
           if (createdPollId) navigate(`/dashboard/polls/${createdPollId}/analytics`);
         }}
       >
-        <p className="text-sm text-slate-300">Share this link with participants:</p>
+        <p className="text-sm text-zinc-300">Share this link with participants:</p>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <code className="flex-1 truncate rounded-lg bg-black/40 px-3 py-2 text-xs text-indigo-200">
+          <code className="flex-1 truncate rounded-lg bg-black/40 px-3 py-2 text-xs text-zinc-200">
             {createdSlug ? publicPollUrl(createdSlug) : ""}
           </code>
           <Button

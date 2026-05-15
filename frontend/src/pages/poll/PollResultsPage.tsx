@@ -44,7 +44,7 @@ export function PollResultsPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Results not published yet</h1>
-        <p className="mt-2 text-slate-400">Check back later once the host publishes the outcome.</p>
+        <p className="mt-2 text-zinc-400">Check back later once the host publishes the outcome.</p>
       </Card>
     );
   }
@@ -67,13 +67,13 @@ export function PollResultsPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">{data.poll.title}</h1>
-        {data.poll.description ? <p className="mt-2 text-slate-300">{data.poll.description}</p> : null}
-        <p className="mt-3 text-sm text-slate-400">{data.poll.totalSubmissions} total submissions</p>
+        {data.poll.description ? <p className="mt-2 text-zinc-300">{data.poll.description}</p> : null}
+        <p className="mt-3 text-sm text-zinc-400">{data.poll.totalSubmissions} total submissions</p>
       </div>
       {data.questions.map((q) => (
         <Card key={q.id}>
           <h2 className="text-lg font-semibold text-white">{q.text}</h2>
-          <p className="text-sm text-slate-400">{q.totalAnswers} answers</p>
+          <p className="text-sm text-zinc-400">{q.totalAnswers} answers</p>
           <div className="mt-4">
             <ResultBarChart
               data={q.options.map((o) => ({

@@ -2,6 +2,14 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", var(--font-sans);
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --leading-tight: 1.1;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
 }
 
 html,
@@ -13,9 +21,48 @@ body,
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background: radial-gradient(1200px 800px at 10% -10%, rgba(99, 102, 241, 0.25), transparent),
-    radial-gradient(900px 600px at 90% 0%, rgba(139, 92, 246, 0.2), transparent), #0f172a;
-  color: #e2e8f0;
+  background: #000000;
+  background-image: 
+    radial-gradient(circle at 0% 0%, hsla(240, 5%, 15%, 1) 0, transparent 40%), 
+    radial-gradient(circle at 100% 0%, hsla(240, 5%, 10%, 1) 0, transparent 40%),
+    radial-gradient(circle at 50% 50%, hsla(240, 5%, 5%, 1) 0, transparent 100%);
+  color: #fafafa;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.glass-morphism {
+  background: rgba(24, 24, 27, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.premium-shadow {
+  box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.1);
 }
 
 a {

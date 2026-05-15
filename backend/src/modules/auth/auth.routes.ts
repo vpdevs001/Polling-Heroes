@@ -10,5 +10,7 @@ router.post("/register", validate(registerSchema), ctrl.register);
 router.post("/login", validate(loginSchema), ctrl.login);
 router.post("/logout", requireAuth, ctrl.logout);
 router.get("/me", requireAuth, ctrl.getMe);
+router.get("/verify-email", ctrl.verifyEmail);
+router.post("/resend-verification", ctrl.resendVerification);
 
 export default router;

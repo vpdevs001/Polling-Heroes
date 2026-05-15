@@ -107,15 +107,15 @@ export function PollAnalyticsPage() {
             <h1 className="text-3xl font-semibold text-white">{data.poll.title}</h1>
             <Badge className={statusBadgeClass(data.poll.status)}>{data.poll.status}</Badge>
             {data.poll.isPublished ? (
-              <Badge className="bg-indigo-500/15 text-indigo-200 ring-indigo-500/30">Published</Badge>
+              <Badge className="bg-white/10 text-white ring-white/20">Published</Badge>
             ) : null}
           </div>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-zinc-400">
             {data.poll.participantType} · {data.poll.totalSubmissions} submissions · Unique{" "}
             {data.poll.uniqueResponders}
           </p>
           {data.poll.expiresAt ? (
-            <p className="text-xs text-slate-500">Expires {formatDate(data.poll.expiresAt)}</p>
+            <p className="text-xs text-zinc-500">Expires {formatDate(data.poll.expiresAt)}</p>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
@@ -151,22 +151,22 @@ export function PollAnalyticsPage() {
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
-          <p className="text-sm text-slate-400">Total submissions</p>
+          <p className="text-sm text-zinc-400">Total submissions</p>
           <p className="mt-2 text-3xl font-semibold text-white">{data.poll.totalSubmissions}</p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-400">Questions</p>
+          <p className="text-sm text-zinc-400">Questions</p>
           <p className="mt-2 text-3xl font-semibold text-white">{data.questions.length}</p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-400">Unique responders</p>
+          <p className="text-sm text-zinc-400">Unique responders</p>
           <p className="mt-2 text-3xl font-semibold text-white">{data.poll.uniqueResponders}</p>
         </Card>
       </div>
 
       <Card>
         <div className="mb-4 flex items-center gap-2 text-white">
-          <LineChartIcon className="h-5 w-5 text-indigo-300" />
+          <LineChartIcon className="h-5 w-5 text-zinc-300" />
           <h2 className="text-lg font-semibold">Timeline</h2>
         </div>
         <TimelineChart data={data.timeline} />
@@ -176,7 +176,7 @@ export function PollAnalyticsPage() {
         {data.questions.map((q) => (
           <Card key={q.id}>
             <h3 className="text-lg font-semibold text-white">{q.text}</h3>
-            <p className="text-sm text-slate-400">{q.totalAnswers} answers</p>
+            <p className="text-sm text-zinc-400">{q.totalAnswers} answers</p>
             <div className="mt-4 grid gap-6 lg:grid-cols-2">
               <ResultBarChart
                 data={q.options.map((o) => ({

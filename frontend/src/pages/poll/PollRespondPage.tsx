@@ -52,7 +52,7 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Poll not found</h1>
-        <p className="mt-2 text-slate-400">This link may be incorrect or the poll was removed.</p>
+        <p className="mt-2 text-zinc-400">This link may be incorrect or the poll was removed.</p>
       </Card>
     );
   }
@@ -91,7 +91,7 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">This poll has ended</h1>
-        <p className="mt-2 text-slate-400">Responses are closed and results are not published yet.</p>
+        <p className="mt-2 text-zinc-400">Responses are closed and results are not published yet.</p>
       </Card>
     );
   }
@@ -100,7 +100,7 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Thank you!</h1>
-        <p className="mt-2 text-slate-400">Your response has been recorded.</p>
+        <p className="mt-2 text-zinc-400">Your response has been recorded.</p>
       </Card>
     );
   }
@@ -109,7 +109,7 @@ export function PollRespondPage() {
     return (
       <Card>
         <h1 className="text-xl font-semibold text-white">Already responded</h1>
-        <p className="mt-2 text-slate-400">We already have a submission from you for this poll.</p>
+        <p className="mt-2 text-zinc-400">We already have a submission from you for this poll.</p>
       </Card>
     );
   }
@@ -157,7 +157,7 @@ export function PollRespondPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">{poll.title}</h1>
-        {poll.description ? <p className="mt-2 text-slate-300">{poll.description}</p> : null}
+        {poll.description ? <p className="mt-2 text-zinc-300">{poll.description}</p> : null}
       </div>
       <form onSubmit={(e) => void onSubmit(e)} className="space-y-6">
         {questions.map((q) => (
@@ -170,7 +170,7 @@ export function PollRespondPage() {
               {q.options.map((o) => (
                 <label
                   key={o.id}
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-slate-950/40 px-3 py-2 hover:border-indigo-400/40"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-zinc-950/40 px-3 py-2 hover:border-white/40"
                 >
                   <input
                     type="radio"
@@ -179,7 +179,7 @@ export function PollRespondPage() {
                     checked={answers[q.id] === o.id}
                     onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
                   />
-                  <span className="text-slate-200">{o.text}</span>
+                  <span className="text-zinc-200">{o.text}</span>
                 </label>
               ))}
             </div>
@@ -191,8 +191,8 @@ export function PollRespondPage() {
         {formError ? <p className="text-center text-sm text-rose-300">{formError}</p> : null}
       </form>
       {poll.isPublished ? (
-        <p className="text-center text-sm text-slate-400">
-          <Link className="text-indigo-300 hover:text-indigo-200" to={`/poll/${slug}/results`}>
+        <p className="text-center text-sm text-zinc-400">
+          <Link className="text-white hover:underline underline-offset-4" to={`/poll/${slug}/results`}>
             View published results
           </Link>
         </p>

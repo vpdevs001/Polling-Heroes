@@ -40,10 +40,10 @@ export function LoginPage() {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12">
       <Card className="w-full max-w-md">
         <h1 className="text-2xl font-semibold text-white">Welcome back</h1>
-        <p className="mt-1 text-sm text-slate-400">Sign in to manage your polls.</p>
+        <p className="mt-1 text-sm text-zinc-400">Sign in to manage your polls.</p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <Input label="Email" type="email" autoComplete="email" {...form.register("email")} />
           <div className="relative">
@@ -55,7 +55,7 @@ export function LoginPage() {
             />
             <button
               type="button"
-              className="absolute right-2 top-8 text-slate-400 hover:text-white"
+              className="absolute right-2 top-8 text-zinc-400 hover:text-white"
               onClick={() => setShowPw((v) => !v)}
               aria-label={showPw ? "Hide password" : "Show password"}
             >
@@ -67,9 +67,9 @@ export function LoginPage() {
             {form.formState.isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-slate-400">
+        <p className="mt-4 text-center text-sm text-zinc-400">
           New here?{" "}
-          <Link className="text-indigo-300 hover:text-indigo-200" to="/register">
+          <Link className="text-white hover:underline underline-offset-4" to="/register">
             Create an account
           </Link>
         </p>

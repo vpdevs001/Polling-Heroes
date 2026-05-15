@@ -19,10 +19,10 @@ export function PollCard({ poll, onEnd, onDelete, busy }: Props) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-white">{poll.title}</h3>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-zinc-400">
             {poll.participantType} · {poll.submissionCount} responses
           </p>
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-zinc-500">
             Created {formatDate(poll.createdAt)}
             {poll.expiresAt ? ` · Expires ${formatDate(poll.expiresAt)}` : ""}
           </p>
@@ -30,7 +30,7 @@ export function PollCard({ poll, onEnd, onDelete, busy }: Props) {
         <div className="flex flex-wrap items-center gap-2">
           <Badge className={statusBadgeClass(poll.status)}>{poll.status}</Badge>
           {poll.isPublished ? (
-            <Badge className="bg-indigo-500/15 text-indigo-200 ring-indigo-500/30">Published</Badge>
+            <Badge className="bg-white/10 text-white ring-white/20">Published</Badge>
           ) : null}
         </div>
       </div>

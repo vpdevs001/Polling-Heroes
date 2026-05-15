@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Navbar } from "./components/layout/Navbar.js";
 import { PageContainer } from "./components/layout/PageContainer.js";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute.js";
@@ -11,6 +11,8 @@ import { NotFoundPage } from "./pages/NotFoundPage.js";
 import { PollAnalyticsPage } from "./pages/poll/PollAnalyticsPage.js";
 import { PollRespondPage } from "./pages/poll/PollRespondPage.js";
 import { PollResultsPage } from "./pages/poll/PollResultsPage.js";
+import { HomePage } from "./pages/HomePage.js";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage.js";
 
 function PublicShell() {
   return (
@@ -24,9 +26,16 @@ function PublicShell() {
 }
 
 export const router = createBrowserRouter([
-  { path: "/", element: <Navigate to="/dashboard" replace /> },
-  { path: "/login", element: <LoginPage /> },
-  { path: "/register", element: <RegisterPage /> },
+  {
+    path: "/",
+    element: <PublicShell />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "verify-email", element: <VerifyEmailPage /> },
+    ],
+  },
   {
     path: "/dashboard",
     element: <ProtectedRoute />,

@@ -4,6 +4,8 @@ import { eq } from "drizzle-orm";
 import { db } from "../../common/db/index.js";
 import { users } from "../../common/db/schema.js";
 import type { z } from "zod";
+import crypto from "crypto";
+import { sendVerificationEmail } from "../../common/utils/email.util.js";
 import type { loginSchema, registerSchema } from "./auth.schema.js";
 
 const SALT_ROUNDS = 10;
@@ -34,6 +36,9 @@ export function generateToken(userId: string) {
 
 export async function createUser(input: RegisterInput) {
   const hashed = await hashPassword(input.password);
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  const verificationTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
   const [created] = await db
     .insert(users)
     .values({
@@ -41,14 +46,21 @@ export async function createUser(input: RegisterInput) {
       lastName: input.lastName,
       email: input.email.toLowerCase(),
       password: hashed,
+      verificationToken,
+      verificationTokenExpiresAt,
     })
     .returning({
       id: users.id,
       firstName: users.firstName,
       lastName: users.lastName,
       email: users.email,
+      isVerified: users.isVerified,
       createdAt: users.createdAt,
     });
+
+  // Send verification email
+  await sendVerificationEmail(created.email, verificationToken);
+
   return created;
 }
 
@@ -104,13 +116,69 @@ export async function loginUser(input: LoginInput) {
   if (!ok) {
     return { error: "INVALID_CREDENTIALS" as const };
   }
+  // isVerified check removed here, will be handled at feature level
+
   const user = {
     id: row.id,
     firstName: row.firstName,
     lastName: row.lastName,
     email: row.email,
+    isVerified: row.isVerified,
     createdAt: row.createdAt,
   };
   const token = generateToken(row.id);
   return { user, token };
+}
+
+export async function verifyEmailToken(token: string) {
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.verificationToken, token))
+    .limit(1);
+
+  if (!user) {
+    return { error: "INVALID_TOKEN" as const };
+  }
+
+  if (user.verificationTokenExpiresAt && user.verificationTokenExpiresAt < new Date()) {
+    return { error: "TOKEN_EXPIRED" as const };
+  }
+
+  await db
+    .update(users)
+    .set({
+      isVerified: true,
+      verificationToken: null,
+      verificationTokenExpiresAt: null,
+    })
+    .where(eq(users.id, user.id));
+
+  return { success: true };
+}
+
+export async function resendVerificationToken(email: string) {
+  const user = await findUserByEmail(email);
+  if (!user) {
+    return { error: "USER_NOT_FOUND" as const };
+  }
+
+  if (user.isVerified) {
+    return { error: "ALREADY_VERIFIED" as const };
+  }
+
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  const verificationTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+  await db
+    .update(users)
+    .set({
+      verificationToken,
+      verificationTokenExpiresAt,
+    })
+    .where(eq(users.id, user.id));
+
+  await sendVerificationEmail(user.email, verificationToken);
+
+  return { success: true };
 }

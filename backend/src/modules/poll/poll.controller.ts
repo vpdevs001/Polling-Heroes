@@ -7,6 +7,9 @@ import * as pollService from "./poll.service.js";
 
 export const createPoll = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) throw ApiError.unauthorized();
+  if (!req.user.isVerified) {
+    throw ApiError.forbidden("You must verify your email address before creating polls.");
+  }
   const poll = await pollService.createPoll(req.user.id, req.body);
   return res.status(201).json(new ApiResponse(201, { poll }, "Poll created"));
 });
