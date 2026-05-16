@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: polling-heroes-backend
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm start

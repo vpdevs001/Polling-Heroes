@@ -13,5 +13,5 @@
     "declaration": false,
     "noEmitOnError": true
   },
-  "include": ["server.ts", "src/**/*.ts", "src/types/**/*.d.ts"]
+  "include": ["index.ts", "src/**/*.ts", "src/types/**/*.d.ts"]
 }

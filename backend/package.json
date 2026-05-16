@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node index.js",
     "build": "tsc -p .",
-    "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
@@ -34,6 +34,7 @@
     "nodemailer": "^8.0.7",
     "pg": "^8.20.0",
     "socket.io": "^4.8.3",
+    "typescript": "^6.0.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
