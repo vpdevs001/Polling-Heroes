@@ -12,12 +12,13 @@ const transporter = nodemailer.createTransport({
 
 const isEmailConfigured = () => {
   return (
-    process.env.SMTP_USER && 
-    process.env.SMTP_USER !== "your_mailtrap_user" &&
-    process.env.SMTP_PASS &&
-    process.env.SMTP_PASS !== "your_mailtrap_pass"
+    process.env.EMAIL_USER && 
+    process.env.EMAIL_PASS &&
+    process.env.EMAIL_HOST &&
+    process.env.EMAIL_PORT
   );
 };
+
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   if (!isEmailConfigured()) {
@@ -28,7 +29,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
 
   const mailOptions = {
-    from: `"Polling Heroes" <noreply@pollingheroes.com>`,
+    from: `"Polling Heroes" <${process.env.EMAIL_FROM || "noreply@pollingheroes.com"}>`,
     to: email,
     subject: "Verify Your Email - Polling Heroes",
     html: `
