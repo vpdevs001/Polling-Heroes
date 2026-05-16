@@ -4,4 +4,4 @@ services:
     runtime: node
     plan: free
     buildCommand: pnpm install && pnpm run build
-    startCommand: pnpm start
+    startCommand: pnpm run db:migrate && pnpm start
