@@ -13,7 +13,9 @@ type SocketContextValue = {
   socket: Socket | null;
   joinPoll: (pollId: string) => void;
   leavePoll: (pollId: string) => void;
-  onResponseNew: (cb: (payload: { pollId: string; totalSubmissions: number }) => void) => () => void;
+  onResponseNew: (
+    cb: (payload: { pollId: string; totalSubmissions: number }) => void,
+  ) => () => void;
   onPollEnded: (cb: (payload: { pollId: string }) => void) => () => void;
   onPollPublished: (cb: (payload: { pollId: string }) => void) => () => void;
 };
@@ -29,6 +31,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       withCredentials: true,
       transports: ["websocket", "polling"],
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSocket(s);
     return () => {
       s.disconnect();
@@ -95,9 +98,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     [socket, joinPoll, leavePoll, onResponseNew, onPollEnded, onPollPublished],
   );
 
-  return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
+  return (
+    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
+  );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useSocketContext() {
   const ctx = useContext(SocketContext);
   if (!ctx) {

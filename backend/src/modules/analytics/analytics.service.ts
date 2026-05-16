@@ -5,7 +5,11 @@ import { ApiError } from "../../common/utils/ApiError.js";
 import * as pollService from "../poll/poll.service.js";
 
 export async function buildAnalyticsPayload(pollId: string) {
-  const [poll] = await db.select().from(polls).where(eq(polls.id, pollId)).limit(1);
+  const [poll] = await db
+    .select()
+    .from(polls)
+    .where(eq(polls.id, pollId))
+    .limit(1);
   if (!poll) return null;
 
   const totalSubmissions = await pollService.countSubmissions(pollId);
@@ -20,7 +24,9 @@ export async function buildAnalyticsPayload(pollId: string) {
       const [row] = await db
         .select({ c: count(responses.id) })
         .from(responses)
-        .where(and(eq(responses.optionId, o.id), eq(responses.questionId, q.id)));
+        .where(
+          and(eq(responses.optionId, o.id), eq(responses.questionId, q.id)),
+        );
       const c = Number(row?.c ?? 0);
       totalAnswers += c;
       optionRows.push({ option: o, count: c });
@@ -67,7 +73,9 @@ export async function buildAnalyticsPayload(pollId: string) {
     where poll_id = ${pollId}
   `);
 
-  const urRows = uniqueRespondersResult.rows as unknown as { c: number | string }[];
+  const urRows = uniqueRespondersResult.rows as unknown as {
+    c: number | string;
+  }[];
   const uniqueResponders = Number(urRows[0]?.c ?? 0);
 
   return {

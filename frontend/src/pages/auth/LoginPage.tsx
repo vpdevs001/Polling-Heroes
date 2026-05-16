@@ -16,7 +16,8 @@ export function LoginPage() {
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from ?? "/dashboard";
+  const from =
+    (location.state as { from?: string } | null)?.from ?? "/dashboard";
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,9 +44,16 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12">
       <Card className="w-full max-w-md">
         <h1 className="text-2xl font-semibold text-white">Welcome back</h1>
-        <p className="mt-1 text-sm text-zinc-400">Sign in to manage your polls.</p>
+        <p className="mt-1 text-sm text-zinc-400">
+          Sign in to manage your polls.
+        </p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-          <Input label="Email" type="email" autoComplete="email" {...form.register("email")} />
+          <Input
+            label="Email"
+            type="email"
+            autoComplete="email"
+            {...form.register("email")}
+          />
           <div className="relative">
             <Input
               label="Password"
@@ -59,17 +67,28 @@ export function LoginPage() {
               onClick={() => setShowPw((v) => !v)}
               aria-label={showPw ? "Hide password" : "Show password"}
             >
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPw ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
           {error ? <p className="text-sm text-rose-300">{error}</p> : null}
-          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
             {form.formState.isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-zinc-400">
           New here?{" "}
-          <Link className="text-white hover:underline underline-offset-4" to="/register">
+          <Link
+            className="text-white hover:underline underline-offset-4"
+            to="/register"
+          >
             Create an account
           </Link>
         </p>

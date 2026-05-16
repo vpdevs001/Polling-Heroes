@@ -8,7 +8,9 @@
   --leading-tight: 1.1;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-display);
 }
 
@@ -22,13 +24,22 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   background: #000000;
-  background-image: 
+  background-image:
     linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    radial-gradient(circle at 0% 0%, hsla(240, 5%, 15%, 1) 0, transparent 40%), 
-    radial-gradient(circle at 100% 0%, hsla(240, 5%, 10%, 1) 0, transparent 40%),
+    radial-gradient(circle at 0% 0%, hsla(240, 5%, 15%, 1) 0, transparent 40%),
+    radial-gradient(
+      circle at 100% 0%,
+      hsla(240, 5%, 10%, 1) 0,
+      transparent 40%
+    ),
     radial-gradient(circle at 50% 50%, hsla(240, 5%, 5%, 1) 0, transparent 100%);
-  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+  background-size:
+    40px 40px,
+    40px 40px,
+    100% 100%,
+    100% 100%,
+    100% 100%;
   color: #fafafa;
   overflow-x: hidden;
 }
@@ -37,7 +48,11 @@ body {
   position: absolute;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
   filter: blur(80px);
   z-index: -1;
@@ -45,33 +60,54 @@ body {
 }
 
 @keyframes reveal {
-  from { 
-    opacity: 0; 
-    transform: translateY(30px) scale(0.95); 
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
     filter: blur(10px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
     filter: blur(0);
   }
 }
 
 @keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(1deg); }
-  66% { transform: translateY(5px) rotate(-1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
 }
 
 @keyframes glow {
-  0%, 100% { opacity: 0.3; filter: blur(20px); }
-  50% { opacity: 0.6; filter: blur(40px); }
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.6;
+    filter: blur(40px);
+  }
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(50px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .animate-reveal {

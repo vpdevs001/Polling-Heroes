@@ -35,7 +35,9 @@ export function getIO(): Server {
 }
 
 export function emitResponseNew(pollId: string, totalSubmissions: number) {
-  getIO().to(`poll:${pollId}`).emit("response:new", { pollId, totalSubmissions });
+  getIO()
+    .to(`poll:${pollId}`)
+    .emit("response:new", { pollId, totalSubmissions });
 }
 
 export function emitPollEnded(pollId: string) {

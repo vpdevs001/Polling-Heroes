@@ -16,7 +16,11 @@ type RequestUser = {
   lastName: string;
 } | null;
 
-export async function submitResponses(slug: string, body: SubmitBody, user: RequestUser) {
+export async function submitResponses(
+  slug: string,
+  body: SubmitBody,
+  user: RequestUser,
+) {
   const pollRow = await pollService.getPollBySlugPublic(slug);
   if (!pollRow) {
     throw ApiError.notFound("Poll not found");
@@ -42,7 +46,10 @@ export async function submitResponses(slug: string, body: SubmitBody, user: Requ
   const dupConditions =
     pollRow.participantType === "Authenticated" && user
       ? and(eq(submissions.pollId, pollRow.id), eq(submissions.userId, user.id))
-      : and(eq(submissions.pollId, pollRow.id), eq(submissions.sessionToken, sessionToken!));
+      : and(
+          eq(submissions.pollId, pollRow.id),
+          eq(submissions.sessionToken, sessionToken!),
+        );
 
   const [existing] = await db
     .select({ id: submissions.id })
@@ -71,7 +78,9 @@ export async function submitResponses(slug: string, body: SubmitBody, user: Requ
   for (const q of qs) {
     if (!q.isRequired) continue;
     if (!answersByQuestion.has(q.id)) {
-      throw ApiError.badRequest(`Missing answer for required question: ${q.text.slice(0, 80)}`);
+      throw ApiError.badRequest(
+        `Missing answer for required question: ${q.text.slice(0, 80)}`,
+      );
     }
   }
 
@@ -91,9 +100,12 @@ export async function submitResponses(slug: string, body: SubmitBody, user: Requ
       .insert(submissions)
       .values({
         pollId: pollRow.id,
-        userId: pollRow.participantType === "Authenticated" && user ? user.id : null,
+        userId:
+          pollRow.participantType === "Authenticated" && user ? user.id : null,
         sessionToken:
-          pollRow.participantType === "Anonymous" ? sessionToken ?? null : null,
+          pollRow.participantType === "Anonymous"
+            ? (sessionToken ?? null)
+            : null,
       })
       .returning();
 

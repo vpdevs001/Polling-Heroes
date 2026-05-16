@@ -3,9 +3,9 @@ import { ApiError } from "../utils/ApiError.js";
 
 export const errorHandler = (
   err: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
@@ -23,7 +23,7 @@ export const errorHandler = (
   });
 };
 
-export const routeNotFound = (req: Request, res: Response, next: NextFunction) => {
+export const routeNotFound = (req: Request, _res: Response, next: NextFunction) => {
   const error = ApiError.notFound(`Route ${req.originalUrl} not found`);
   next(error);
 };

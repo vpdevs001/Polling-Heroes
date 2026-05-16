@@ -36,12 +36,6 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
 
   password: varchar("password", { length: 255 }),
-  
-  isVerified: boolean("is_verified").default(false).notNull(),
-  
-  verificationToken: varchar("verification_token", { length: 255 }),
-  
-  verificationTokenExpiresAt: timestamp("verification_token_expires_at"),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
 
@@ -201,9 +195,8 @@ export const responses = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
-    submissionQuestionUnique: uniqueIndex("responses_submission_question_uidx").on(
-      table.submissionId,
-      table.questionId,
-    ),
+    submissionQuestionUnique: uniqueIndex(
+      "responses_submission_question_uidx",
+    ).on(table.submissionId, table.questionId),
   }),
 );

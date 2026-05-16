@@ -12,7 +12,6 @@ import { PollAnalyticsPage } from "./pages/poll/PollAnalyticsPage.js";
 import { PollRespondPage } from "./pages/poll/PollRespondPage.js";
 import { PollResultsPage } from "./pages/poll/PollResultsPage.js";
 import { HomePage } from "./pages/HomePage.js";
-import { VerifyEmailPage } from "./pages/VerifyEmailPage.js";
 
 function PublicShell() {
   return (
@@ -25,7 +24,7 @@ function PublicShell() {
   );
 }
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <PublicShell />,
@@ -33,7 +32,6 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
-      { path: "verify-email", element: <VerifyEmailPage /> },
     ],
   },
   {

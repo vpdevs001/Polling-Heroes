@@ -56,7 +56,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const onUnauthorized = () => setUser(null);
     window.addEventListener("auth:unauthorized", onUnauthorized);
-    return () => window.removeEventListener("auth:unauthorized", onUnauthorized);
+    return () =>
+      window.removeEventListener("auth:unauthorized", onUnauthorized);
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -68,8 +69,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(res.data.user);
     } catch (e) {
       if (axios.isAxiosError(e)) {
-        const msg = (e.response?.data as { message?: string } | undefined)?.message;
-        throw new Error(typeof msg === "string" ? msg : "Login failed");
+        const msg = (e.response?.data as { message?: string } | undefined)
+          ?.message;
+        throw new Error(typeof msg === "string" ? msg : "Login failed", {
+          cause: e,
+        });
       }
       throw e;
     }
@@ -90,8 +94,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(res.data.user);
       } catch (e) {
         if (axios.isAxiosError(e)) {
-          const msg = (e.response?.data as { message?: string } | undefined)?.message;
-          throw new Error(typeof msg === "string" ? msg : "Registration failed");
+          const msg = (e.response?.data as { message?: string } | undefined)
+            ?.message;
+          throw new Error(
+            typeof msg === "string" ? msg : "Registration failed",
+            { cause: e },
+          );
         }
         throw e;
       }
@@ -123,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
   if (!ctx) {

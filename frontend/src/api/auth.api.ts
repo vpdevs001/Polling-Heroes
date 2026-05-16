@@ -7,17 +7,24 @@ export async function register(payload: {
   email: string;
   password: string;
 }) {
-  const { data } = await api.post<ApiEnvelope<{ user: AuthUser }>>("/auth/register", payload);
+  const { data } = await api.post<ApiEnvelope<{ user: AuthUser }>>(
+    "/auth/register",
+    payload,
+  );
   return data;
 }
 
 export async function login(payload: { email: string; password: string }) {
-  const { data } = await api.post<ApiEnvelope<{ user: AuthUser }>>("/auth/login", payload);
+  const { data } = await api.post<ApiEnvelope<{ user: AuthUser }>>(
+    "/auth/login",
+    payload,
+  );
   return data;
 }
 
 export async function logout() {
-  const { data } = await api.post<ApiEnvelope<{ message: string }>>("/auth/logout");
+  const { data } =
+    await api.post<ApiEnvelope<{ message: string }>>("/auth/logout");
   return data;
 }
 

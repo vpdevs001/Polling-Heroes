@@ -33,8 +33,10 @@ export async function copyToClipboard(text: string) {
 }
 
 export function statusBadgeClass(status: string) {
-  if (status === "Active") return "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30";
-  if (status === "Ended") return "bg-rose-500/15 text-rose-300 ring-rose-500/30";
+  if (status === "Active")
+    return "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30";
+  if (status === "Ended")
+    return "bg-rose-500/15 text-rose-300 ring-rose-500/30";
   return "bg-zinc-500/15 text-zinc-300 ring-zinc-500/30";
 }
 

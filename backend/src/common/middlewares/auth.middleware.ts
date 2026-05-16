@@ -33,7 +33,6 @@ export const requireAuth = asyncHandler(
           email: users.email,
           firstName: users.firstName,
           lastName: users.lastName,
-          isVerified: users.isVerified,
         })
         .from(users)
         .where(eq(users.id, userId))
@@ -70,7 +69,6 @@ export const optionalAuth = asyncHandler(
           email: users.email,
           firstName: users.firstName,
           lastName: users.lastName,
-          isVerified: users.isVerified,
         })
         .from(users)
         .where(eq(users.id, userId))

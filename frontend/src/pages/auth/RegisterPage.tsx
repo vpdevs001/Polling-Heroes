@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
@@ -37,22 +38,39 @@ export function RegisterPage() {
     try {
       await registerUser(values);
       navigate("/dashboard", { replace: true });
-    } catch (e: any) {
-      setError(e.response?.data?.message || e.message || "Registration failed");
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        setError(
+          e.response?.data?.message || e.message || "Registration failed",
+        );
+      } else if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("Registration failed");
+      }
     }
   });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12">
       <Card className="w-full max-w-md">
-        <h1 className="text-2xl font-semibold text-white">Create your account</h1>
-        <p className="mt-1 text-sm text-zinc-400">Start building polls in minutes.</p>
+        <h1 className="text-2xl font-semibold text-white">
+          Create your account
+        </h1>
+        <p className="mt-1 text-sm text-zinc-400">
+          Start building polls in minutes.
+        </p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input label="First name" {...form.register("firstName")} />
             <Input label="Last name" {...form.register("lastName")} />
           </div>
-          <Input label="Email" type="email" autoComplete="email" {...form.register("email")} />
+          <Input
+            label="Email"
+            type="email"
+            autoComplete="email"
+            {...form.register("email")}
+          />
           <div className="relative">
             <Input
               label="Password"
@@ -66,17 +84,30 @@ export function RegisterPage() {
               onClick={() => setShowPw((v) => !v)}
               aria-label={showPw ? "Hide password" : "Show password"}
             >
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPw ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
           {error ? <p className="text-sm text-rose-300">{error}</p> : null}
-          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Creating account…" : "Create account"}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting
+              ? "Creating account…"
+              : "Create account"}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-zinc-400">
           Already have an account?{" "}
-          <Link className="text-white hover:underline underline-offset-4" to="/login">
+          <Link
+            className="text-white hover:underline underline-offset-4"
+            to="/login"
+          >
             Sign in
           </Link>
         </p>

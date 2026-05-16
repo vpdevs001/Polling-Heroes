@@ -1,6 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useFieldArray, useForm, type Control, type UseFormRegister, Controller } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  type Control,
+  type UseFormRegister,
+  Controller,
+} from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Plus, Trash2 } from "lucide-react";
 import * as pollApi from "../../api/poll.api.js";
@@ -11,8 +17,6 @@ import { Card } from "../../components/ui/Card.js";
 import { Input } from "../../components/ui/Input.js";
 import { Modal } from "../../components/ui/Modal.js";
 import { copyToClipboard, publicPollUrl } from "../../lib/utils.js";
-import { useAuth } from "../../hooks/useAuth.js";
-import { AlertCircle } from "lucide-react";
 
 type FormValues = z.infer<typeof createPollFormSchema>;
 
@@ -39,7 +43,11 @@ function QuestionEditor({
   remove: () => void;
   canRemove: boolean;
 }) {
-  const { fields, append, remove: removeOpt } = useFieldArray({
+  const {
+    fields,
+    append,
+    remove: removeOpt,
+  } = useFieldArray({
     control,
     name: `questions.${index}.options`,
   });
@@ -49,7 +57,12 @@ function QuestionEditor({
       <div className="flex items-start justify-between gap-3">
         <h2 className="text-lg font-medium text-white">Question {index + 1}</h2>
         {canRemove ? (
-          <Button type="button" variant="ghost" className="gap-2 text-rose-300" onClick={remove}>
+          <Button
+            type="button"
+            variant="ghost"
+            className="gap-2 text-rose-300"
+            onClick={remove}
+          >
             <Trash2 className="h-4 w-4" />
             Remove
           </Button>
@@ -73,12 +86,22 @@ function QuestionEditor({
       <div className="space-y-2">
         <p className="text-sm text-zinc-400">Options</p>
         {fields.map((opt, oi) => (
-          <div key={opt.id} className="flex flex-col gap-2 sm:flex-row sm:items-end">
+          <div
+            key={opt.id}
+            className="flex flex-col gap-2 sm:flex-row sm:items-end"
+          >
             <div className="flex-1">
-              <Input label={`Option ${oi + 1}`} {...register(`questions.${index}.options.${oi}.text`)} />
+              <Input
+                label={`Option ${oi + 1}`}
+                {...register(`questions.${index}.options.${oi}.text`)}
+              />
             </div>
             {fields.length > 2 ? (
-              <Button type="button" variant="ghost" onClick={() => removeOpt(oi)}>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => removeOpt(oi)}
+              >
                 Remove
               </Button>
             ) : null}
@@ -99,7 +122,6 @@ function QuestionEditor({
 }
 
 export function CreatePollPage() {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
@@ -117,7 +139,10 @@ export function CreatePollPage() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({ control: form.control, name: "questions" });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "questions",
+  });
 
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
@@ -125,7 +150,9 @@ export function CreatePollPage() {
       title: values.title,
       description: values.description?.trim() ? values.description : null,
       participantType: values.participantType,
-      expiresAt: values.expiresAt?.trim() ? new Date(values.expiresAt).toISOString() : null,
+      expiresAt: values.expiresAt?.trim()
+        ? new Date(values.expiresAt).toISOString()
+        : null,
       questions: values.questions.map((q, qi) => ({
         text: q.text,
         isRequired: q.isRequired,
@@ -151,17 +178,10 @@ export function CreatePollPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Create a poll</h1>
-        <p className="text-zinc-400">Add questions, options, and choose how participants join.</p>
+        <p className="text-zinc-400">
+          Add questions, options, and choose how participants join.
+        </p>
       </div>
-
-      {!user?.isVerified && (
-        <Card className="border-amber-500/20 bg-amber-500/5 p-4">
-          <div className="flex items-center gap-3 text-amber-200">
-            <AlertCircle className="h-5 w-5" />
-            <p className="text-sm">You must verify your email address before you can create polls.</p>
-          </div>
-        </Card>
-      )}
 
       <form className="space-y-6" onSubmit={onSubmit}>
         <Card className="space-y-4">
@@ -180,10 +200,16 @@ export function CreatePollPage() {
               {...form.register("participantType")}
             >
               <option value="Anonymous">Anonymous (session token)</option>
-              <option value="Authenticated">Authenticated (account required)</option>
+              <option value="Authenticated">
+                Authenticated (account required)
+              </option>
             </select>
           </label>
-          <Input label="Expires at (optional)" type="datetime-local" {...form.register("expiresAt")} />
+          <Input
+            label="Expires at (optional)"
+            type="datetime-local"
+            {...form.register("expiresAt")}
+          />
         </Card>
 
         {fields.map((field, qi) => (
@@ -207,7 +233,7 @@ export function CreatePollPage() {
             <Plus className="h-4 w-4" />
             Add question
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting || !user?.isVerified}>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? "Creating…" : "Create poll"}
           </Button>
         </div>
@@ -219,17 +245,22 @@ export function CreatePollPage() {
         title="Poll created"
         onClose={() => {
           setModalOpen(false);
-          if (createdPollId) navigate(`/dashboard/polls/${createdPollId}/analytics`);
+          if (createdPollId)
+            navigate(`/dashboard/polls/${createdPollId}/analytics`);
         }}
       >
-        <p className="text-sm text-zinc-300">Share this link with participants:</p>
+        <p className="text-sm text-zinc-300">
+          Share this link with participants:
+        </p>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
           <code className="flex-1 truncate rounded-lg bg-black/40 px-3 py-2 text-xs text-zinc-200">
             {createdSlug ? publicPollUrl(createdSlug) : ""}
           </code>
           <Button
             type="button"
-            onClick={() => createdSlug && void copyToClipboard(publicPollUrl(createdSlug))}
+            onClick={() =>
+              createdSlug && void copyToClipboard(publicPollUrl(createdSlug))
+            }
           >
             Copy
           </Button>
@@ -239,7 +270,8 @@ export function CreatePollPage() {
           className="mt-4 w-full"
           onClick={() => {
             setModalOpen(false);
-            if (createdPollId) navigate(`/dashboard/polls/${createdPollId}/analytics`);
+            if (createdPollId)
+              navigate(`/dashboard/polls/${createdPollId}/analytics`);
           }}
         >
           Go to analytics

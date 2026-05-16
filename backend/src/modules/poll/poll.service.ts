@@ -108,7 +108,11 @@ export async function getPollsByHost(hostId: string) {
 }
 
 export async function getPollByIdForHost(pollId: string, hostId: string) {
-  const [row] = await db.select().from(polls).where(eq(polls.id, pollId)).limit(1);
+  const [row] = await db
+    .select()
+    .from(polls)
+    .where(eq(polls.id, pollId))
+    .limit(1);
   if (!row) return null;
   if (row.hostId !== hostId) {
     throw ApiError.forbidden("You do not own this poll");
@@ -117,7 +121,11 @@ export async function getPollByIdForHost(pollId: string, hostId: string) {
 }
 
 export async function getPollBySlugPublic(slug: string) {
-  const [row] = await db.select().from(polls).where(eq(polls.url, slug)).limit(1);
+  const [row] = await db
+    .select()
+    .from(polls)
+    .where(eq(polls.url, slug))
+    .limit(1);
   if (!row) return null;
   return checkAndExpirePoll(row);
 }
@@ -140,7 +148,11 @@ export async function getPollQuestionsAndOptions(pollId: string) {
   return result;
 }
 
-export async function updatePoll(pollId: string, hostId: string, input: UpdatePollInput) {
+export async function updatePoll(
+  pollId: string,
+  hostId: string,
+  input: UpdatePollInput,
+) {
   const poll = await getPollByIdForHost(pollId, hostId);
   if (!poll) throw ApiError.notFound("Poll not found");
 
@@ -150,7 +162,8 @@ export async function updatePoll(pollId: string, hostId: string, input: UpdatePo
   if (input.title !== undefined) patch.title = input.title;
   if (input.description !== undefined) patch.description = input.description;
   if (input.expiresAt !== undefined) patch.expiresAt = input.expiresAt;
-  if (input.participantType !== undefined) patch.participantType = input.participantType;
+  if (input.participantType !== undefined)
+    patch.participantType = input.participantType;
 
   const [updated] = await db
     .update(polls)
